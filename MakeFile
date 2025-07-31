@@ -1,0 +1,76 @@
+# Variables
+DOCKER_COMPOSE = docker-compose
+DOCKER_COMPOSE_DEV = docker-compose -f docker/docker-compose.dev.yml
+DOCKER_COMPOSE_PROD = docker-compose -f docker/docker-compose.prod.yml
+BUILD_DIR = ./build
+CONTAINER_NAME = laravel-api
+
+# Commands
+.PHONY: build-dev build-prod up-dev up-prod down-dev down-prod logs-dev logs-prod clean nuke test
+
+# Build Docker images for development
+build-dev:
+	@export $(shell grep -v '^#' .env | xargs) && $(DOCKER_COMPOSE_DEV) build
+
+# Build Docker images for production
+build-prod:
+	@export $(shell grep -v '^#' .env | xargs) && $(DOCKER_COMPOSE_PROD) build
+
+# Start Docker containers for development
+up-dev:
+	@export $(shell grep -v '^#' .env | xargs) && $(DOCKER_COMPOSE_DEV) up -d
+
+# Start Docker containers for production
+up-prod:
+	@export $(shell grep -v '^#' .env | xargs) && $(DOCKER_COMPOSE_PROD) up -d
+
+# Stop Docker containers for development
+down-dev:
+	$(DOCKER_COMPOSE_DEV) down
+
+# Stop Docker containers for production
+down-prod:
+	$(DOCKER_COMPOSE_PROD) down
+
+# Tail logs for development
+logs-dev:
+	$(DOCKER_COMPOSE_DEV) logs -f
+
+# Tail logs for production
+logs-prod:
+	$(DOCKER_COMPOSE_PROD) logs -f
+
+# Clean up Docker volumes and containers
+clean:
+	$(DOCKER_COMPOSE_DEV) down -v
+	$(DOCKER_COMPOSE_PROD) down -v
+	docker system prune -f
+
+# Build custom build directory
+build-dir:
+	mkdir -p $(BUILD_DIR)
+
+# Run a specific container (default is laravel-api)
+run-container:
+	docker exec -it $(CONTAINER_NAME) /bin/bash
+
+# Run tests
+test:
+	docker exec -it $(CONTAINER_NAME) php artisan test
+
+nuke:
+	@echo "Stopping all containers..."
+	@docker stop $$(docker ps -aq) || true
+	@echo "Removing all containers..."
+	@docker rm $$(docker ps -aq) || true
+	@echo "Removing all images..."
+	@docker rmi $$(docker images -q) || true
+	@echo "Pruning unused volumes..."
+	@docker volume prune -f
+	@echo "Removing all volumes..."
+	@docker volume rm $$(docker volume ls -q) || true
+	@echo "Pruning unused networks..."
+	@docker network prune -f
+	@echo "Pruning entire system..."
+	@docker system prune -a -f
+	@echo "💥 Docker system nuked. Done."
