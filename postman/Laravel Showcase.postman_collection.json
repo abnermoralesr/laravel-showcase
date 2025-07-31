@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "618afccc-ca0f-4f41-bfd2-af38f8416d39",
+		"name": "Laravel Showcase",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25134059",
+		"_collection_link": "https://valle-app.postman.co/workspace/Valle-App-Workspace~ae226815-a746-4194-8388-54c5b0573b67/collection/25134059-618afccc-ca0f-4f41-bfd2-af38f8416d39?action=share&source=collection_link&creator=25134059"
+	},
+	"item": [
+		{
+			"name": "Company",
+			"item": [
+				{
+					"name": "Store Company",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let responseData = pm.response.json();\r",
+									"\r",
+									"pm.collectionVariables.set(\"company_id\", responseData.data.id);\r",
+									"console.log(\"Extracted company_id:\", pm.collectionVariables.get(\"company_id\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"user_id\": 5,\r\n  \"name\": \"Dummy Company\",\r\n  \"state\": \"AR\",\r\n  \"registered_agent_id\": null,\r\n  \"self_assigned\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER}}{{PREFIX_COMPANY}}",
+							"host": [
+								"{{SERVER}}{{PREFIX_COMPANY}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Store Agent",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"user_id\": 5,\r\n  \"state\": \"CA\",\r\n  \"agent_id\": 5,\r\n  \"self_assigned\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER}}{{PREFIX_COMPANY}}{{company_id}}/registered-agent",
+							"host": [
+								"{{SERVER}}{{PREFIX_COMPANY}}{{company_id}}"
+							],
+							"path": [
+								"registered-agent"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "RegisteredAgent",
+			"item": [
+				{
+					"name": "Get Registered Agent Capacity",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER}}states/ar/registered-agent/capacity",
+							"host": [
+								"{{SERVER}}states"
+							],
+							"path": [
+								"ar",
+								"registered-agent",
+								"capacity"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "SERVER",
+			"value": "http://localhost/api/",
+			"type": "string"
+		},
+		{
+			"key": "PREFIX_COMPANY",
+			"value": "companies/",
+			"type": "string"
+		},
+		{
+			"key": "company_id",
+			"value": "0",
+			"type": "string"
+		}
+	]
+}
