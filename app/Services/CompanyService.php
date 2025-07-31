@@ -42,6 +42,37 @@ class CompanyService
 
     /**
      * @param int $userId
+     * @param array $data
+     * @return array
+     */
+    public function updateRegisteredAgent(
+        int $userId,
+        array $data
+    ): array {
+        $user = User::findOrFail($userId);
+        $company = Company::where([
+            'id' => $data['company_id'],
+            'user_id' => $user->id
+        ])->firstOrFail();
+        [$agentId, $agentType, $fallback] = $this->prepareRegisteredAgent(
+            $user->id,
+            $data['iso_code'],
+            $data['self_assigned'],
+            $data['agent_id']
+        );
+        $company->update([
+            'registered_agent_id' => $agentId,
+            'registered_agent_type' => $agentType,
+        ]);
+
+        return [
+            $company,
+            $fallback
+        ];
+    }
+
+    /**
+     * @param int $userId
      * @param string $isoCode
      * @param bool|null $selfAssigned
      * @param int|null $registeredAgentId

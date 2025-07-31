@@ -21,4 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('companies')->name('companies.')->namespace('App\Http\Controllers\Api\V1\CompanyController')->group(static function (): void {
     Route::post('/', [CompanyController::class, 'store']);
+    Route::put('/{company}/registered-agent', [CompanyController::class, 'updateRegisteredAgent']);
 });
