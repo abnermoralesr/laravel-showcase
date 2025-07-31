@@ -49,6 +49,21 @@ class CompanyFactory extends Factory
         ];
     }
 
+    public static function setStateIsoCodes(array $states): void
+    {
+        self::$stateIsoCodes = $states;
+    }
+
+    public static function setUserIds(array $userIds): void
+    {
+        self::$userIds = $userIds;
+    }
+
+    public static function setRegisteredAgentIds(array $agentIds): void
+    {
+        self::$registeredAgentIds = $agentIds;
+    }
+
     private function initRelatedTables(): void {
         if (self::$stateIsoCodes === null) {
             self::$stateIsoCodes = State::pluck('iso_code')->toArray();
