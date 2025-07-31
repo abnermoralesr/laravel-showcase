@@ -1,0 +1,66 @@
+services:
+  db:
+    image: mysql:8
+    container_name: mysql
+    env_file:
+      - ../.env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - app_network
+    ports:
+        - "3306:3306"
+
+  api:
+    image: laravel-api
+    container_name: laravel-api
+    build:
+      context: ../
+      dockerfile: docker/DockerFile.dev
+    env_file:
+      - ../.env
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - MAIL_DRIVER=${MAIL_DRIVER}
+      - MAIL_MAILER=${MAIL_MAILER}
+      - MAIL_HOST=${MAIL_HOST}
+      - MAIL_PORT=${MAIL_PORT}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - MAIL_ENCRYPTION=${MAIL_ENCRYPTION}
+      - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS}
+      - MAIL_FROM_NAME=${MAIL_FROM_NAME}
+    networks:
+      - app_network
+    depends_on:
+      - redis
+      - db
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-proxy
+    volumes:
+      - ./nginx/dev.conf:/etc/nginx/conf.d/default.conf
+      - .:/var/www
+    ports:
+        - "80:80"
+    networks:
+      - app_network
+    depends_on:
+      - api
+
+volumes:
+  db-data:
+
+networks:
+  app_network:
+    driver: bridge
