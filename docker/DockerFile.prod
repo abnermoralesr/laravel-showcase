@@ -1,0 +1,29 @@
+# docker/Dockerfile.prod
+FROM php:8.2-fpm
+
+RUN apt-get update && apt-get install -y \
+    git curl unzip zip \
+    libzip-dev libpng-dev libonig-dev libicu-dev \
+    && docker-php-ext-install mysqli pdo pdo_mysql zip intl \
+    && pecl install redis && docker-php-ext-enable redis \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY docker/scripts/wait-for-db-prod.sh /usr/local/bin/wait-for-db-prod.sh
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+RUN chmod +x /usr/local/bin/wait-for-db-prod.sh
+
+WORKDIR /var/www
+
+COPY . .
+
+RUN composer install --no-dev --optimize-autoloader --prefer-dist
+
+# Establecer permisos y propiedad para los directorios storage y bootstrap/cache
+RUN chmod -R 775 storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
+
+EXPOSE 9000
+
+ENTRYPOINT ["wait-for-db-prod.sh"]
+CMD ["php-fpm"]
