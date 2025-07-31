@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\RegisteredAgentType;
+use App\Events\RegisteredAgentAssigned;
 use App\Models\Company;
 use App\Models\RegisteredAgent;
 use App\Models\User;
@@ -34,6 +35,11 @@ class CompanyService
             'registered_agent_type' => $registeredType,
         ]);
 
+        if ($registeredType === RegisteredAgentType::REGISTERED_AGENT) {
+            $company->load('registeredAgent');
+            event(new RegisteredAgentAssigned($company));
+        }
+
         return [
             $company,
             $fallback
@@ -64,6 +70,11 @@ class CompanyService
             'registered_agent_id' => $agentId,
             'registered_agent_type' => $agentType,
         ]);
+
+        if ($agentType === RegisteredAgentType::REGISTERED_AGENT) {
+            $company->load('registeredAgent');
+            event(new RegisteredAgentAssigned($company));
+        }
 
         return [
             $company,
