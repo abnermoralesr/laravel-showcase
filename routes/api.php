@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\CompanyController;
+use App\Http\Controllers\Api\V1\RegisteredAgentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,3 +24,5 @@ Route::prefix('companies')->name('companies.')->namespace('App\Http\Controllers\
     Route::post('/', [CompanyController::class, 'store']);
     Route::put('/{company}/registered-agent', [CompanyController::class, 'updateRegisteredAgent']);
 });
+
+Route::get('/states/{iso_code}/registered-agent/capacity', [RegisteredAgentController::class, 'verifyCapacity']);
