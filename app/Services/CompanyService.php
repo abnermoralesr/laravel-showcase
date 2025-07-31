@@ -38,6 +38,7 @@ class CompanyService
         if ($registeredType === RegisteredAgentType::REGISTERED_AGENT) {
             $company->load('registeredAgent');
             event(new RegisteredAgentAssigned($company));
+            RegisteredAgentService::checkStateAgentCapacity($data['state']);
         }
 
         return [
@@ -74,6 +75,7 @@ class CompanyService
         if ($agentType === RegisteredAgentType::REGISTERED_AGENT) {
             $company->load('registeredAgent');
             event(new RegisteredAgentAssigned($company));
+            RegisteredAgentService::checkStateAgentCapacity($company->state);
         }
 
         return [

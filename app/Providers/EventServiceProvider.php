@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Events\RegisteredAgentAssigned;
+use App\Events\StateCapacity;
 use App\Listeners\SendRegisteredAgentNotification;
+use App\Listeners\SendStateCapacity;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         RegisteredAgentAssigned::class => [
             SendRegisteredAgentNotification::class
+        ],
+        StateCapacity::class => [
+            SendStateCapacity::class
         ]
     ];
 
