@@ -1,66 +1,172 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+[![Docker](https://img.shields.io/badge/Docker-Container-blue?logo=docker)](https://www.docker.com)
+[![PHP](https://img.shields.io/badge/PHP-8.x-blueviolet?logo=php)](https://www.php.net)
+[![Laravel](https://img.shields.io/badge/Laravel-Framework-red?logo=laravel)](https://laravel.com)
+[![MySQL](https://img.shields.io/badge/MySQL-Database-blue?logo=mysql)](https://www.mysql.com)
+[![Redis](https://img.shields.io/badge/Redis-Cache%20Store-darkred?logo=redis)](https://redis.io)
+[![PHPUnit](https://img.shields.io/badge/PHPUnit-Testing-6c78af?logo=php)](https://phpunit.de)
+[![Makefile](https://img.shields.io/badge/Makefile-Build-lightgrey?logo=gnu)](https://www.gnu.org/software/make/)
+[![Postman](https://img.shields.io/badge/Postman-Collection-orange?logo=postman)](postman/your-api-name.postman_collection.json)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# 🧑‍💻 **Laravel Showcase API**
 
-## About Laravel
+This project is an evolving API with robust features, containerized with Docker for easy deployment, and equipped with various tools to make your development experience smooth.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📋 **Project Overview**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+This API provides a set of endpoints designed for **company registration**, **state capacity management**, and **registered agent management**. Built with **Laravel**, the application integrates seamlessly with **MySQL** and **Redis**, ensuring high performance and scalability.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ **Technologies Used**
+- 🧱 **Laravel** - PHP framework for robust backend
+- 🗄️ **MySQL** - Relational database management
+- 🚀 **Redis** - Caching for high-performance services
+- 🐳 **Docker** - Containerized dev and prod environments
+- 🎭 **FakerPHP/Faker** - For seeding realistic data during development
+- 🔧 **Makefile** - Automates and simplifies development commands
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🌟 **Features & Highlights**
+- 🔥 **API Endpoints**:
+    - `POST /companies/register` - Register a new company
+    - `POST /companies/{company_id}/registered-agent` - Assign a registered agent to an existing company
+    - `GET /states/{iso_code}/registered-agent/capacity` - Retrieve capacity for given state (includes list of related agents)
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- 📬 **Postman Collection**: Downloadable and ready to use, with dynamic variable management and sample data available in `/postman/Laravel Showcase.postman_collection.json`.
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+- 📢 **Real-time Notifications**:
+    - State capacity threshold notifications
+    - Registered agent notifications when assigned
 
-## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- 🌱 **Dynamic Seeder**:
+    - Auto-run when `make up-dev` or `make up-prod` is used
+    - Preloaded data for review (production should disable this)
 
-## Security Vulnerabilities
+- 🧱 **Container Separation**:
+    - MySQL (db)
+    - Laravel API (api)
+    - Redis
+    - NGINX Proxy (nginx)
+    - Worker for Queue handling (queue-worker)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
-## License
+## ⚙️ **Setup & Installation**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 📦 1. **Clone the Repository**
+```bash
+git clone https://github.com/abnermoralesr/laravel-showcase.git
+cd laravel-showcase
+```
+
+### 📝 2. **Set Up Environment Variables**
+```bash
+cp .env.example .env
+```
+
+### 🔑 3. **Generate APP_KEY**
+```bash
+php artisan key:generate
+```
+
+### 🔐  4. **Set EMAIL Credentials**
+```
+MAIL_USERNAME=<your_gmail>
+MAIL_PASSWORD=<your_app_password>
+```
+> Make sure to update the rest of the mail .env variables in case you dont use gmail.
+
+### 🐳 5. **Run Docker Compose**
+For development:
+```bash
+make build-dev
+make up-dev
+```
+For production:
+```bash
+make build-prod
+make up-prod
+```
+
+### 📜 6. Logs
+Use this to inspect container health and processes:
+```bash
+make log-dev
+# or
+make log-prod
+```
+
+### 🐳 7. **Shutdown Docker**
+```bash
+make down-dev
+# or
+make down-dev
+```
+
+---
+
+## 🧾 **Environment Variables (.env)**
+
+- `QUEUE_CONNECTION=redis`
+- `DB_CONNECTION=mysql`
+- `DB_HOST=db`
+- `DB_PORT=3306`
+- `DB_DATABASE=laravel`
+- `DB_USERNAME=abner`
+- `DB_PASSWORD=test`
+- `REDIS_HOST=redis`
+- `REDIS_PASSWORD=null`
+- `REDIS_PORT=6379`
+- `MAIL_DRIVER=smtp`
+- `MAIL_HOST=smtp.gmail.com`
+- `MAIL_PORT=587`
+- `MAIL_USERNAME=<your_gmail>`
+- `MAIL_PASSWORD=<your_app_password>`
+- `MAIL_ENCRYPTION=tls`
+- `MAIL_FROM_ADDRESS=hello@example.com`
+
+---
+
+## 🚀 **Access the API**
+Once up, visit:
+```
+http://localhost:80
+```
+
+---
+
+## 🧠 **Commit Message Convention**
+- `feat:` ➤ New feature
+- `test:` ➤ Tests added or updated
+- `chore:` ➤ Tooling or config changes
+- `refactor:` ➤ Code restructuring
+
+---
+
+## 🧪 **Testing**
+```bash
+make test
+```
+
+- Dummy state `DM` is used for repeatable tests.
+- Services & events also tested.
+- Self-contained tests ensure consistency.
+- Tests are only available in dev mode
+
+---
+
+## 📞 **Contact**
+For feedback, questions, or collaborations:
+📧 **developer@abnermoralesr.com**
+
+---
+
+### 💬 **Let's build awesome things together!** 🚀
