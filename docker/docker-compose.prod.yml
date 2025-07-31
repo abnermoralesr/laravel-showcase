@@ -45,6 +45,47 @@ services:
       - redis
       - db
 
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: unless-stopped
+    networks:
+      - app_network
+
+  queue-worker:
+    image: laravel-worker
+    container_name: laravel-queue-worker
+    build:
+      context: ../
+      dockerfile: docker/DockerFile.worker
+    env_file:
+      - ../.env
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - QUEUE_CONNECTION=${QUEUE_CONNECTION}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_PORT=${REDIS_PORT}
+      - MAIL_DRIVER=${MAIL_DRIVER}
+      - MAIL_MAILER=${MAIL_MAILER}
+      - MAIL_HOST=${MAIL_HOST}
+      - MAIL_PORT=${MAIL_PORT}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - MAIL_ENCRYPTION=${MAIL_ENCRYPTION}
+      - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS}
+      - MAIL_FROM_NAME=${MAIL_FROM_NAME}
+    networks:
+      - app_network
+    depends_on:
+      - redis
+      - db
+      - api
+
   nginx:
     image: nginx:latest
     container_name: nginx-proxy
